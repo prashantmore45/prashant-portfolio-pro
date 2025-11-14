@@ -36,7 +36,7 @@
     "title": "AI Image Generator",
     "description": "A web application that generates images based on user prompts using OpenAI's DALL·E API. Built with HTML, CSS, and JavaScript.",
     "github": "https://github.com/prashantmore45/AI-Image-Generator",
-    "demo": "https://ai-image-generator-vert-nine.vercel.app/",
+    "demo": "https://ai-image-generator-tan-five.vercel.app/",
     "image": "images/aiimage.png"
   },
   {
