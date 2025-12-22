@@ -31,7 +31,7 @@
       });
       const data = await res.json();
       if (data.ok && data.token) {
-        localStorage.setItem("admin_token", data.token);
+        localStorage.setItem("adminToken", data.token);
         window.location.href = "/admin/dashboard.html";
       } else {
         document.getElementById("msg").innerText = data.msg || "Login failed";
