@@ -9,7 +9,10 @@ connectDB();
        
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "https://prashantmore45.github.io/prashant-portfolio-v2"
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

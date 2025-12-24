@@ -14,7 +14,7 @@ function readProjects() {
 }
 
 router.get("/", (req, res) => {
-  const projects = readProjects();
+  const projects = readProjects().reverse();
   res.json(projects);
 });
 
