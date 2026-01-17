@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40" role="img" aria-labelledby="logoTitle logoDesc" class="brand-logo">
+  <title id="logoTitle">Prashant More — Brand Logo</title>
+  <desc id="logoDesc">Professional portfolio brand mark, adapts to dark and light themes.</desc>
+
+  <style>
+    /* Theme-aware variables for navbar use */
+    :root {
+      --bezel-1: #8E6E42;
+      --bezel-2: #F3E5AB;
+      --core-fill: #050505;
+      --accent-1: #a855f7;
+      --accent-2: #ec4899;
+      --glow-opacity: 0.85;
+      --glow-blur: 2;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root{
+        --core-fill: #FAFBFC; /* soft pearl for light navbar */
+        --accent-1: #6b21a8;
+        --accent-2: #be185d;
+        --glow-opacity: 0.35;
+        --glow-blur: 1;
+      }
+    }
+
+    .brand-logo{ display:block; }
+    .brand-stroke{ stroke-width:10; stroke-linecap:round; stroke-linejoin:round; fill:none; }
+    .core-fill{ fill:var(--core-fill); }
+  </style>
+
+  <defs>
+    <linearGradient id="gradBrand" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="var(--accent-1)" />
+      <stop offset="100%" stop-color="var(--accent-2)" />
+    </linearGradient>
+
+    <linearGradient id="gradBezel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--bezel-1)" />
+      <stop offset="100%" stop-color="var(--bezel-2)" />
+    </linearGradient>
+
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%" filterUnits="objectBoundingBox">
+      <feGaussianBlur stdDeviation="var(--glow-blur)" result="b" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 var(--glow-opacity) 0" in="b" result="m"/>
+      <feMerge><feMergeNode in="m"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Bezel / rounded square (subtle, professional) -->
+  <path d="M29 5 H71 L95 29 V71 L71 95 H29 L5 71 V29 L29 5 Z" fill="url(#gradBezel)"/>
+
+  <!-- Inner core: adapts to theme (solid in light, deep in dark) -->
+  <path d="M33 12 H67 L88 33 V67 L67 88 H33 L12 67 V33 L33 12 Z" class="core-fill"/>
+
+  <!-- Brand mark (compact, stroke-only for navbar) -->
+  <g transform="translate(22.5 22.5) scale(0.55)" filter="url(#softGlow)">
+    <path d="M10 90 V10 H60 V60 H10 M35 35 H60" class="brand-stroke" stroke="url(#gradBrand)"/>
+    <path d="M70 90 V30 L85 50 L100 30 V90" class="brand-stroke" stroke="url(#gradBrand)"/>
+  </g>
+
+</svg>
