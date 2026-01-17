@@ -57,7 +57,8 @@ const Home = () => {
       <Contact />
 
       <footer className="py-8 text-center text-gray-500 border-t border-white/5">
-        <p>© {new Date().getFullYear()} Prashant More. Built with React & MERN.</p>
+        <p>© {new Date().getFullYear()} Prashant More. All rights reserved.</p>
+        <p className='mt-2'> Made with ❤️ by Prashant More. </p>
       </footer>
 
     </div>
