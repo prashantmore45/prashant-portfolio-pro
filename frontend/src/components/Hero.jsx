@@ -10,13 +10,11 @@ const Hero = () => {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center px-6 pt-16 relative overflow-hidden">
       
-      {/* Background Glow Effect */}
       <div className="absolute top-20 right-0 w-72 h-72 bg-primary/20 rounded-full blur-3xl -z-10 animate-pulse" />
       <div className="absolute bottom-20 left-0 w-72 h-72 bg-secondary/10 rounded-full blur-3xl -z-10" />
 
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         
-        {/* Left: Text Content */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -49,14 +47,12 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Right: Image / Illustration */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="relative flex justify-center"
         >
-          {/* You can replace this with your actual photo or a 3D illustration later */}
           <div className="relative w-80 h-80 md:w-96 md:h-96">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary to-transparent rounded-full opacity-20 animate-spin-slow" />
             <img 
