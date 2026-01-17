@@ -1,34 +1,34 @@
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
+// Load Config
 dotenv.config();         
 connectDB();   
        
 const app = express();
 
+// Middleware
 app.use(cors({
-  origin: "https://prashantmore45.github.io"
+  // We will add your NEW Vercel/Netlify URL here later. 
+  // For now, allow all or keep your current github io
+  origin: "*" 
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// API Routes
 app.use("/api/projects", require("./routes/projects"));
+app.use("/api/admin", require("./routes/admin")); // Renamed for clarity
 app.use("/api/contact", require("./routes/contact"));
-app.use("/api/visitors", require("./routes/visitor"));
-app.use("/api/resume", require("./routes/resume"));
 
-
-app.use("/admin", express.static(path.join(__dirname, "admin")));
-
-app.use("/admin-api", require("./routes/admin"));
+// Note: I removed the static /admin route. 
+// We will build the admin UI in React.
 
 app.get("/", (req, res) => {
-  res.json({ status: "Backend API running" });
+  res.json({ status: "API is running. Database is Connected." });
 });
 
 const PORT = process.env.PORT || 5000;
