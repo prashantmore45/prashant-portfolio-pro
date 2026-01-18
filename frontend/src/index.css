@@ -9,8 +9,10 @@ body {
   color: #e5e5e5;
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
+  cursor: default;
 }
 
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -18,7 +20,7 @@ body {
   background: #0a0a0a; 
 }
 ::-webkit-scrollbar-thumb {
-  background: #333; 
+  background: #222; 
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {

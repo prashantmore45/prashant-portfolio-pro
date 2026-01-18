@@ -1,80 +1,116 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom'; 
-import { FaBars, FaTimes, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+import { FaHome, FaUser, FaCode, FaEnvelope, FaLock, FaGithub, FaLinkedin, FaFileAlt } from 'react-icons/fa';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation(); 
+  const location = useLocation();
 
-  const getLink = (id) => {
-    return location.pathname === "/" ? `#${id}` : `/#${id}`;
-  };
+  const navItems = [
+    { name: 'Home', id: 'home', icon: <FaHome size={20} /> },
+    { name: 'About', id: 'about', icon: <FaUser size={20} /> },
+    { name: 'Work', id: 'projects', icon: <FaCode size={20} /> },
+    { name: 'Contact', id: 'contact', icon: <FaEnvelope size={20} /> },
+  ];
+
+  const getLink = (id) => location.pathname === "/" ? `#${id}` : `/#${id}`;
 
   return (
-    <nav className="fixed w-full z-50 bg-background/80 backdrop-blur-md border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          
-          <div className="flex-shrink-0 flex items-center gap-2">
-            <Link to="/" className="flex items-center gap-2">
-              <img src="/logo.svg" alt="PM Logo" className="h-10 w-10 hover:rotate-12 transition-transform duration-300" />
-              <span className="text-xl font-bold text-white sm:block">
+    <>
+      <div className="fixed top-0 left-0 w-full z-[999] pointer-events-none px-4 md:px-6 pt-4 md:pt-6">
+        <div className="max-w-7xl mx-auto flex justify-between items-center relative">
+
+          <div className="pointer-events-auto">
+            <Link to="/" className="flex items-center gap-2 md:gap-3 group">
+              <img 
+                src="/logo.svg" 
+                alt="Logo" 
+                className="h-8 w-8 md:h-10 md:w-10 drop-shadow-[0_0_10px_rgba(139,92,246,0.5)] transition-transform duration-500 group-hover:rotate-y-180" 
+              />
+              <span className="text-lg md:text-xl font-bold text-white tracking-wide">
                 Prashant<span className="text-primary">.</span>
               </span>
             </Link>
           </div>
 
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              <a href={getLink("home")} className="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer text-gray-300">Home</a>
-              <a href={getLink("about")} className="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer text-gray-300">About</a>
-              <a href={getLink("skills")} className="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer text-gray-300">Skills</a>
-              <a href={getLink("projects")} className="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer text-gray-300">Projects</a>
-              <a href={getLink("contact")} className="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer text-gray-300">Contact</a>
-            </div>
+          <div className="pointer-events-auto hidden md:block absolute left-1/2 -translate-x-1/2">
+            <nav className="flex items-center gap-1 bg-black/40 backdrop-blur-xl border border-white/10 px-3 py-2 rounded-full shadow-2xl">
+                {navItems.map((item) => (
+                    <a 
+                        key={item.name}
+                        href={getLink(item.id)}
+                        className="p-3 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition-all relative group"
+                    >
+                        {item.icon}
+                        <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-white text-black px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            {item.name}
+                        </span>
+                    </a>
+                ))}
+                
+                <div className="w-px h-5 bg-white/20 mx-1" />
+
+                <Link 
+                    to={location.pathname === "/dashboard" ? "/" : "/admin"} 
+                    className="p-3 rounded-full text-primary hover:bg-primary/20 transition-all"
+                >
+                    <FaLock size={20} />
+                </Link>
+            </nav>
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
-             <a href="https://github.com/prashantmore45" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors"><FaGithub size={20}/></a>
-             <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors"><FaLinkedin size={20}/></a>
-             
-             {location.pathname === "/dashboard" ? (
-                <Link to="/" className="ml-4 px-4 py-1.5 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition-all text-sm">
-                  Back to Home
-                </Link>
-             ) : (
-                <Link to="/admin" className="ml-4 px-4 py-1.5 border border-primary text-primary rounded-full hover:bg-primary hover:text-white transition-all text-sm">
-                  Admin
-                </Link>
-             )}
-          </div>
-
-          <div className="-mr-2 flex md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white focus:outline-none"
+          <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
+            <a 
+                href="https://github.com/prashantmore45" 
+                target="_blank" 
+                rel="noreferrer"
+                className="hidden sm:flex p-2 md:p-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-gray-400 hover:text-white hover:border-primary/50 transition-all hover:scale-110"
             >
-              {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-            </button>
-          </div>
-        </div>  
-      </div>
+                <FaGithub size={20} />
+            </a>
+            <a 
+                href="https://linkedin.com" 
+                target="_blank" 
+                rel="noreferrer"
+                className="hidden sm:flex p-2 md:p-3 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-gray-400 hover:text-white hover:border-blue-500/50 transition-all hover:scale-110"
+            >
+                <FaLinkedin size={20} />
+            </a>
 
-      {isOpen && (
-        <div className="md:hidden bg-surface border-b border-white/10">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href={getLink("home")} onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
-            <a href={getLink("about")} onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
-            <a href={getLink("projects")} onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
-            <a href={getLink("contact")} onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Contact</a>
-            
-            <Link to="/admin" onClick={() => setIsOpen(false)} className="text-primary block px-3 py-2 rounded-md text-base font-medium mt-4">
-               {location.pathname === "/dashboard" ? "Back to Home" : "Admin Dashboard"}
-            </Link>
+            <a 
+                href="/resume.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 bg-primary/90 hover:bg-primary backdrop-blur-md border border-white/10 rounded-full text-white font-medium transition-all hover:scale-105 shadow-[0_0_15px_rgba(139,92,246,0.5)] text-sm md:text-base"
+            >
+                <FaFileAlt className="text-sm" />
+                <span>Resume</span>
+            </a>
+
           </div>
         </div>
-      )}
-    </nav>
+      </div>
+
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[999] w-[90%] max-w-md md:hidden pointer-events-auto">
+        <nav className="flex items-center justify-around bg-black/80 backdrop-blur-xl border border-white/10 px-2 py-3 rounded-2xl shadow-2xl">
+            {navItems.map((item) => (
+                <a 
+                    key={item.name}
+                    href={getLink(item.id)}
+                    className="flex flex-col items-center p-2 text-gray-400 hover:text-primary transition-all"
+                >
+                    {item.icon}
+                    <span className="text-[10px] mt-1 font-medium">{item.name}</span>
+                </a>
+            ))}
+            <Link 
+                to={location.pathname === "/dashboard" ? "/" : "/admin"} 
+                className="flex flex-col items-center p-2 text-primary hover:text-white transition-all"
+            >
+                <FaLock size={20} />
+                <span className="text-[10px] mt-1 font-medium">Admin</span>
+            </Link>
+        </nav>
+      </div>
+    </>
   );
 };
 
