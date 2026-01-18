@@ -1,6 +1,7 @@
 # 🚀 Prashant More | Full Stack Developer Portfolio
 
-![Portfolio Preview](frontend/public/images/bg.png) 
+![Portfolio Preview](frontend/public/images/bg.png)
+
 A modern, full-stack portfolio website built to showcase my projects and technical skills. It features a fully dynamic **Content Management System (CMS)**, allowing me to manage projects and messages via a secure Admin Dashboard without touching the codebase.
 
 🔗 **Live Website:** [Insert Your Vercel Link Here]
@@ -72,7 +73,7 @@ npm run dev
 ---
 
 📂 Project Structure
-Bash
+```Bash
 
 prashant-portfolio-pro/
 ├── backend/            # Express API & Database Models
@@ -87,6 +88,7 @@ prashant-portfolio-pro/
     │   ├── pages/      # Full Pages (Home, Dashboard, Login)
     │   └── api/        # Axios Configuration
 
+```
 ---
 
 📬 Contact Me
