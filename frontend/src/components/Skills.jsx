@@ -1,20 +1,26 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaGitAlt } from "react-icons/fa";
-import { SiMongodb, SiExpress, SiTailwindcss, SiCplusplus } from "react-icons/si";
+import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaNodeJs, FaGitAlt, FaGithub, FaJava } from "react-icons/fa";
+import { SiMongodb, SiExpress, SiTailwindcss, SiCplusplus, SiTypescript, SiPython, SiMysql } from "react-icons/si";
 
 const skills = [
-  // ... (Keep your existing skills list here)
   { name: "HTML5", icon: <FaHtml5 className="text-orange-500" /> },
   { name: "CSS3", icon: <FaCss3Alt className="text-blue-500" /> },
   { name: "JavaScript", icon: <FaJs className="text-yellow-400" /> },
+  { name: "TypeScript", icon: <SiTypescript className="text-blue-500" /> },
   { name: "React", icon: <FaReact className="text-cyan-400" /> },
+  { name: "Tailwind", icon: <SiTailwindcss className="text-cyan-300" /> },
   { name: "Node.js", icon: <FaNodeJs className="text-green-500" /> },
   { name: "Express", icon: <SiExpress className="text-white" /> },
   { name: "MongoDB", icon: <SiMongodb className="text-green-400" /> },
-  { name: "Tailwind", icon: <SiTailwindcss className="text-cyan-300" /> },
+  { name: "SQL", icon: <SiMysql className="text-blue-400" /> },
   { name: "C++", icon: <SiCplusplus className="text-blue-600" /> },
+  { name: "Python", icon: <SiPython className="text-yellow-500" /> },
+  { name: "Java", icon: <FaJava className="text-red-600" /> },
   { name: "Git", icon: <FaGitAlt className="text-red-500" /> },
+  { name: "GitHub", icon: <FaGithub className="text-white" /> },
+  { name: "DSA in C++", icon: <SiCplusplus className="text-purple-500" /> },
+  { name: "MERN", icon: <FaNodeJs className="text-green-400" /> },
 ];
 
 const Skills = () => {
