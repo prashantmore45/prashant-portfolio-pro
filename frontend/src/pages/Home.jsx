@@ -28,7 +28,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="bg-background text-text min-h-screen relative overflow-hidden">
+    <div className="bg-background text-text min-h-screen relative overflow-hidden pb-24 md:pb-0">
       
       <div className="hidden md:block">
         <Spotlight />

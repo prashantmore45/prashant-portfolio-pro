@@ -3,7 +3,6 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard'; 
-import ProtectedRoute from './components/ProtectedRoute'; 
 
 function App() {
   return (
@@ -14,16 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Login />} />
-          
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
-
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
     </Router>

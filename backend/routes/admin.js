@@ -1,17 +1,14 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
-
-// Import Models
 const Contact = require("../models/Contact");
-const Project = require("../models/Project"); // New Import
+const Project = require("../models/Project"); 
 
-// Config
+
 const ADMIN_USER = process.env.ADMIN_USER;
 const ADMIN_PASS = process.env.ADMIN_PASS;
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// --- MIDDLEWARE ---
 function adminAuth(req, res, next) {
   const auth = req.headers.authorization;
   if (!auth) return res.status(401).json({ ok: false, msg: "No token" });
@@ -28,7 +25,6 @@ function adminAuth(req, res, next) {
   }
 }
 
-// --- AUTH ROUTES ---
 
 // POST /api/admin/login
 router.post("/login", (req, res) => {
@@ -40,7 +36,6 @@ router.post("/login", (req, res) => {
   return res.status(401).json({ ok: false, msg: "Invalid credentials" });
 });
 
-// --- PROJECT MANAGEMENT ROUTES (Protected) ---
 
 // POST /api/admin/projects/add
 router.post("/projects/add", adminAuth, async (req, res) => {
@@ -51,7 +46,7 @@ router.post("/projects/add", adminAuth, async (req, res) => {
             title,
             description,
             image,
-            tech, // Ensure frontend sends this as an array
+            tech, 
             github,
             demo,
             type
@@ -76,7 +71,6 @@ router.delete("/projects/:id", adminAuth, async (req, res) => {
     }
 });
 
-// --- MESSAGE ROUTES ---
 
 router.get("/messages", adminAuth, async (req, res) => {
   try {
