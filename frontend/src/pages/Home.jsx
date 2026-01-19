@@ -7,7 +7,7 @@ import Skills from '../components/Skills';
 import Contact from '../components/Contact';
 import Spotlight from '../components/Spotlight';
 import api from '../api/axios';
-import { FaGraduationCap, FaCode, FaLaptopCode } from 'react-icons/fa';
+import { FaGraduationCap, FaCode, FaLaptopCode, FaArrowRight } from 'react-icons/fa'; // Added Arrow Icon
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
@@ -40,28 +40,68 @@ const Home = () => {
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="mb-12 md:mb-16 text-center md:text-left"
+            className="mb-8 md:mb-16 text-center md:text-left"
         >
             <h2 className="text-3xl md:text-5xl font-bold mb-4">Selected <span className="text-primary">Works</span></h2>
             <p className="text-gray-400 max-w-xl text-lg mx-auto md:mx-0">
                 A collection of digital products, experiments, and open source contributions.
             </p>
+            
+            <div className="flex items-center justify-center md:hidden gap-2 mt-4 text-sm text-primary animate-pulse">
+                <span>Swipe to explore</span>
+                <FaArrowRight />
+            </div>
         </motion.div>
 
         {loading ? (
           <div className="text-primary animate-pulse text-xl text-center">Loading Projects...</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 auto-rows-auto md:auto-rows-[400px]">
+          <div className="
+            flex 
+            overflow-x-auto 
+            snap-x 
+            snap-mandatory 
+            gap-6 
+            pb-8 
+            
+            /* Ensure the first card isn't flush against the edge */
+            px-2 
+            
+            md:grid 
+            md:grid-cols-3 
+            md:gap-6 
+            md:auto-rows-[400px]
+            md:overflow-visible 
+            md:pb-0
+            md:px-0
+            
+            scrollbar-hide
+          ">
             {projects.map((project, index) => (
-              <ProjectCard 
-                key={project._id} 
-                project={project} 
-                className={
-                    index === 0 ? "md:col-span-2" : 
+              <div 
+                key={project._id}
+                className={`
+                  /* Make card 85% of screen width.
+                     This forces the NEXT card to 'peek' by 15% 
+                     so users know to scroll.
+                  */
+                  min-w-[85vw] 
+                  sm:min-w-[400px] 
+                  snap-center 
+                  
+                  md:min-w-0 
+                  md:w-full
+
+                  ${index === 0 ? "md:col-span-2" : 
                     index === 3 ? "md:col-span-2 md:row-span-2" : 
-                    "md:col-span-1"
-                } 
-              />
+                    "md:col-span-1"}
+                `}
+              >
+                <ProjectCard 
+                  project={project} 
+                  className="h-full w-full" 
+                />
+              </div>
             ))}
           </div>
         )}
