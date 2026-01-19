@@ -25,7 +25,7 @@ const Navbar = () => {
                 alt="Logo" 
                 className="h-8 w-8 md:h-10 md:w-10 drop-shadow-[0_0_10px_rgba(139,92,246,0.5)] transition-transform duration-500 group-hover:rotate-y-180" 
               />
-              <span className="text-lg md:text-xl font-bold text-white tracking-wide">
+              <span className="text-xl md:text-2xl font-bold text-white tracking-wide">
                 Prashant<span className="text-primary">.</span>
               </span>
             </Link>
@@ -50,9 +50,12 @@ const Navbar = () => {
 
                 <Link 
                     to={location.pathname === "/dashboard" ? "/" : "/admin"} 
-                    className="p-3 rounded-full text-primary hover:bg-primary/20 transition-all"
+                    className="p-3 rounded-full text-primary hover:bg-primary/20 transition-all relative group"
                 >
                     <FaLock size={20} />
+                    <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-white text-black px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        Admin
+                    </span>
                 </Link>
             </nav>
           </div>
