@@ -76,7 +76,7 @@ const Navbar = () => {
             </a>
 
             <a 
-                href="/resume.pdf" 
+                href="../../resume.pdf" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 bg-primary/90 hover:bg-primary backdrop-blur-md border border-white/10 rounded-full text-white font-medium transition-all hover:scale-105 shadow-[0_0_15px_rgba(139,92,246,0.5)] text-sm md:text-base"
