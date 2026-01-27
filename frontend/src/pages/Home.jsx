@@ -73,11 +73,11 @@ const Home = () => {
   return (
     <div className="bg-background text-text min-h-screen relative overflow-hidden pb-24 md:pb-0">
       
-      <div className="hidden md:block pointer-events-none">
+      <div className="hidden md:block pointer-events-none absolute inset-0 z-0">
         <Spotlight />
       </div>
 
-      <div className="pointer-events-none">
+      <div className="relative z-10 touch-pan-y h-screen max-h-[900px]">
          <Hero3D />
       </div>
 

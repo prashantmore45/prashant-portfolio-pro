@@ -36,7 +36,7 @@ const Hero3D = () => {
                 A <span className="text-white font-semibold">Full-Stack Engineer</span> architecting 3D web experiences and scalable systems. I turn complex problems into elegant code.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              <div className="flex flex-row flex-wrap items-center gap-4 justify-center md:justify-start">
                 <a href="#projects" className="px-6 py-3 md:px-8 md:py-3 bg-primary hover:bg-violet-700 text-white font-bold rounded-lg transition-all shadow-[0_0_20px_rgba(139,92,246,0.5)] text-sm md:text-base">
                   View Work
                 </a>
