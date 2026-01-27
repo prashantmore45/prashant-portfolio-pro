@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom'; 
 import Hero3D from '../components/Hero3D';
 import ProjectCard from '../components/ProjectCard';
 import Skills from '../components/Skills';
 import Contact from '../components/Contact';
 import Spotlight from '../components/Spotlight';
 import api from '../api/axios';
-import { FaGraduationCap, FaCode, FaLaptopCode, FaArrowRight } from 'react-icons/fa';
+import { FaGraduationCap, FaCode, FaLaptopCode, FaArrowRight, FaHandPointRight } from 'react-icons/fa'; // Added Hand Icon
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
@@ -28,7 +29,6 @@ const Home = () => {
     fetchProjects();
   }, []);
 
-  /* CONFIGURATION */
   const themes = [
     {
       badge: "bg-violet-500/10 text-violet-400 border-violet-500/20",
@@ -64,7 +64,6 @@ const Home = () => {
     return "md:col-span-6";
   };
 
-  /* NEW HANDLER: Detects scroll */
   const handleScroll = () => {
     if (!hasScrolled) {
       setHasScrolled(true);
@@ -92,63 +91,78 @@ const Home = () => {
             <p className="text-gray-400 max-w-xl text-lg mx-auto md:mx-0">
                 A collection of digital products and experiments.
             </p>
-  
-            <div className={`flex items-center justify-center md:hidden gap-2 mt-4 text-xs text-primary animate-pulse font-mono transition-opacity duration-500 ${hasScrolled ? "opacity-0" : "opacity-100"}`}>
-                <span>SWIPE TO EXPLORE</span>
-                <FaArrowRight />
+          
+            <div className={`flex items-center justify-center md:hidden gap-2 mt-6 transition-opacity duration-500 ${hasScrolled ? "opacity-0" : "opacity-100"}`}>
+                <div className="flex items-center gap-2 bg-primary/10 backdrop-blur-md border border-primary/20 text-primary px-5 py-2 rounded-full text-sm font-bold shadow-[0_0_20px_rgba(139,92,246,0.3)] animate-pulse">
+                    <FaHandPointRight />
+                    <span>SWIPE TO EXPLORE</span>
+                    <FaArrowRight />
+                </div>
             </div>
         </motion.div>
 
         {loading ? (
           <div className="text-primary animate-pulse text-xl text-center">Loading Projects...</div>
         ) : (
-          <div 
-            // === ATTACH SCROLL LISTENER ===
-            onScroll={handleScroll}
-            className="
-            flex 
-            overflow-x-auto 
-            snap-x 
-            snap-mandatory 
-            gap-4 
-            pb-8 
-            px-2
-            scrollbar-hide
+          <>
+            <div 
+                onScroll={handleScroll}
+                className="
+                flex 
+                overflow-x-auto 
+                snap-x 
+                snap-mandatory 
+                gap-4 
+                pb-8 
+                px-2
+                scrollbar-hide
 
-            md:grid 
-            md:grid-cols-12 
-            md:gap-6 
-            md:auto-rows-fr 
-            md:overflow-visible 
-            md:pb-0
-            md:px-0
-          ">
-            {projects.slice(0, 4).map((project, index) => (
-              <div 
-                key={project._id}
-                className={`
-                  min-w-[85vw] 
-                  sm:min-w-[400px] 
-                  snap-center 
-                  md:min-w-0 
-                  md:w-full
-                  h-full
-                  ${getGridSpan(index)}
-                `}
-              >
-                <ProjectCard 
-                    project={project} 
-                    theme={themes[index % themes.length]} 
-                />
-              </div>
-            ))}
-          </div>
+                md:grid 
+                md:grid-cols-12 
+                md:gap-6 
+                md:auto-rows-fr 
+                md:overflow-visible 
+                md:pb-0
+                md:px-0
+            ">
+                {projects.slice(0, 4).map((project, index) => (
+                <div 
+                    key={project._id}
+                    className={`
+                    min-w-[85vw] 
+                    sm:min-w-[400px] 
+                    snap-center 
+                    md:min-w-0 
+                    md:w-full
+                    h-full
+                    ${getGridSpan(index)}
+                    `}
+                >
+                    <ProjectCard 
+                        project={project} 
+                        theme={themes[index % themes.length]} 
+                    />
+                </div>
+                ))}
+            </div>
+
+            {/* View Full Archive Link */}
+            <div className="mt-8 md:mt-12 text-center">
+                <Link 
+                    to="/archive" 
+                    className="inline-flex items-center gap-2 text-gray-400 border-b border-gray-700 pb-1 hover:text-white hover:border-white transition-colors group text-sm md:text-base"
+                >
+                    <span className="font-medium">View Full Project Archive</span>
+                    <FaArrowRight className="transform group-hover:translate-x-1 transition-transform text-xs" />
+                </Link>
+            </div>
+          </>
         )}
       </section>
 
       <Skills />
       
-      {/* (About & Contact Sections) */}
+      {/* About & Contact Sections... */}
       <section id="about" className="py-16 md:py-32 px-4 md:px-6 relative z-10 bg-black/20">
          <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl md:text-5xl font-bold mb-12 md:mb-16 text-center">About <span className="text-primary">Me</span></h2>

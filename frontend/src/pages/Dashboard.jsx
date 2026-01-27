@@ -1,12 +1,13 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
-import { FaPlus, FaTrash, FaEdit, FaSignOutAlt, FaEnvelope, FaProjectDiagram, FaSortNumericDown } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaEdit, FaSignOutAlt, FaEnvelope, FaProjectDiagram, FaSortNumericDown, FaCloudUploadAlt, FaImage } from 'react-icons/fa';
 
 const Dashboard = () => {
   const { user, logout, loading } = useContext(AuthContext);
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const [activeTab, setActiveTab] = useState('projects');
   const [projects, setProjects] = useState([]);
@@ -21,7 +22,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    
     if (!token && !loading) {
       navigate('/admin');
     } else {
@@ -33,28 +33,33 @@ const Dashboard = () => {
     try {
       const projRes = await api.get('/projects');
       setProjects(projRes.data);
-      
       try {
         const msgRes = await api.get('/contact');
         setMessages(msgRes.data);
-      } catch (e) {
-        console.error(e);
-        console.log("Message fetch skipped (Limited Access)");
-      }
-    } catch (err) {
-      console.error("Error fetching data:", err);
-    }
+      } catch (e) { console.log("Message fetch skipped", e); }
+    } catch (err) { console.error("Error fetching data:", err); }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const techArray = typeof formData.tech === 'string' ? formData.tech.split(',').map(t => t.trim()) : formData.tech;
     
-    const payload = { ...formData, tech: techArray };
+    const payload = { ...formData, tech: techArray, order: Number(formData.order) };
 
     try {
       if (isEditing) {
@@ -84,7 +89,7 @@ const Dashboard = () => {
       demo: project.demo,
       tech: project.tech.join(', '), 
       type: project.type,
-      order: project.order || 99
+      order: project.order || 0
     });
     setIsEditing(true);
     setCurrentId(project._id);
@@ -97,13 +102,13 @@ const Dashboard = () => {
       fetchData();
     }
   };
-
+  
   const handleDeleteMessage = async (id) => {
-    if (window.confirm("Delete this message?")) {
-      await api.delete(`/contact/${id}`);
-      fetchData();
-    }
-  };
+      if (window.confirm("Delete this message?")) {
+        await api.delete(`/contact/${id}`);
+        fetchData();
+      }
+    };
 
   if (loading) return <div className="h-screen flex items-center justify-center text-primary text-xl">Loading...</div>;
 
@@ -111,7 +116,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background text-text px-4 pb-24 pt-24 md:px-8 md:pt-28">
       <div className="max-w-7xl mx-auto">
         
-        {/* === Header === */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
           <h1 className="text-2xl md:text-3xl font-bold">Admin <span className="text-primary">Panel</span></h1>
           <button onClick={logout} className="flex items-center gap-2 bg-red-500/10 text-red-500 px-6 py-2 rounded-full hover:bg-red-500/20 transition-all text-sm font-bold">
@@ -119,27 +124,21 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Mobile Friendly Tabs */}
+        {/* Tabs */}
         <div className="flex gap-2 mb-8 bg-white/5 p-1 rounded-xl overflow-x-auto">
-          <button 
-            onClick={() => setActiveTab('projects')} 
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all whitespace-nowrap text-sm font-bold ${activeTab === 'projects' ? 'bg-primary text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-          >
+          <button onClick={() => setActiveTab('projects')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all text-sm font-bold ${activeTab === 'projects' ? 'bg-primary text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}>
             <FaProjectDiagram /> Projects
           </button>
-          <button 
-            onClick={() => setActiveTab('messages')} 
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all whitespace-nowrap text-sm font-bold ${activeTab === 'messages' ? 'bg-primary text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-          >
+          <button onClick={() => setActiveTab('messages')} className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg transition-all text-sm font-bold ${activeTab === 'messages' ? 'bg-primary text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}>
             <FaEnvelope /> Messages
           </button>
         </div>
 
         {/* PROJECTS TAB */}
         {activeTab === 'projects' && (
-          <div className="grid lg:grid-cols-3 gap-8 items-start">
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
             
-            {/* Form Section (Left/Top) */}
+            {/* LEFT: ADD/EDIT FORM */}
             <div className="lg:col-span-1">
               <div className="bg-surface p-6 rounded-2xl border border-white/10 lg:sticky lg:top-24 shadow-xl backdrop-blur-sm bg-black/40">
                 <h2 className="text-xl font-bold mb-6 flex items-center gap-3 border-b border-white/10 pb-4">
@@ -153,32 +152,45 @@ const Dashboard = () => {
                       <label className="text-[10px] uppercase tracking-wider text-gray-500 mb-1 block">Order</label>
                       <div className="relative">
                         <FaSortNumericDown className="absolute top-3 left-3 text-gray-500 text-xs"/>
-                        <input 
-                          name="order" 
-                          type="number" 
-                          placeholder="#" 
-                          value={formData.order} 
-                          onChange={handleChange} 
-                          className="w-full bg-black/50 pl-8 p-3 rounded-lg border border-white/10 outline-none text-white font-bold focus:border-primary transition-colors text-center" 
-                        />
+                        <input name="order" type="number" placeholder="#" value={formData.order} onChange={handleChange} className="w-full bg-black/50 pl-8 p-3 rounded-lg border border-white/10 outline-none text-white font-bold focus:border-primary transition-colors text-center" />
                       </div>
                     </div>
                     <div className="flex-1">
                       <label className="text-[10px] uppercase tracking-wider text-gray-500 mb-1 block">Title</label>
-                      <input 
-                        name="title" 
-                        placeholder="Project Name" 
-                        value={formData.title} 
-                        onChange={handleChange} 
-                        required 
-                        className="w-full bg-black/50 p-3 rounded-lg border border-white/10 outline-none text-white focus:border-primary transition-colors placeholder-gray-600" 
-                      />
+                      <input name="title" placeholder="Project Name" value={formData.title} onChange={handleChange} required className="w-full bg-black/50 p-3 rounded-lg border border-white/10 outline-none text-white focus:border-primary transition-colors placeholder-gray-600" />
+                    </div>
+                  </div>
+
+                  {/* Image Upload */}
+                  <div>
+                    <label className="text-[10px] uppercase tracking-wider text-gray-500 mb-1 block">Project Image</label>
+                    <div 
+                        onClick={() => fileInputRef.current.click()}
+                        className="group relative h-32 w-full bg-black/30 border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all overflow-hidden"
+                    >
+                        {formData.image ? (
+                            <>
+                                <img src={formData.image} alt="Preview" className="w-full h-full object-cover opacity-50 group-hover:opacity-30 transition-opacity" />
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity font-bold text-white text-sm">
+                                    Click to Change
+                                </div>
+                            </>
+                        ) : (
+                            <div className="text-center p-4">
+                                <FaCloudUploadAlt className="text-2xl text-gray-500 mx-auto mb-2 group-hover:text-primary transition-colors" />
+                                <span className="text-xs text-gray-400">Click to upload image</span>
+                            </div>
+                        )}
+                    </div>
+                    <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    <div className="relative mt-2">
+                         <FaImage className="absolute top-3.5 left-3 text-gray-500 text-xs"/>
+                        <input name="image" placeholder="Or paste Image URL..." value={formData.image} onChange={handleChange} className="w-full bg-black/50 pl-8 p-3 rounded-lg border border-white/10 outline-none text-xs text-white focus:border-primary transition-colors placeholder-gray-600" />
                     </div>
                   </div>
 
                   <input name="type" placeholder="Type (e.g. Full Stack App)" value={formData.type} onChange={handleChange} className="w-full bg-black/50 p-3 rounded-lg border border-white/10 outline-none text-white focus:border-primary transition-colors placeholder-gray-600" />
                   <textarea name="description" placeholder="Short Description..." rows="3" value={formData.description} onChange={handleChange} required className="w-full bg-black/50 p-3 rounded-lg border border-white/10 outline-none text-white focus:border-primary transition-colors placeholder-gray-600" />
-                  <input name="image" placeholder="Image URL (https://...)" value={formData.image} onChange={handleChange} required className="w-full bg-black/50 p-3 rounded-lg border border-white/10 outline-none text-white focus:border-primary transition-colors placeholder-gray-600" />
                   
                   <div className="grid grid-cols-2 gap-3">
                     <input name="github" placeholder="GitHub Link" value={formData.github} onChange={handleChange} required className="w-full bg-black/50 p-3 rounded-lg border border-white/10 outline-none text-white focus:border-primary transition-colors placeholder-gray-600" />
@@ -201,19 +213,44 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* List Section (Right/Bottom) */}
-            <div className="lg:col-span-2 space-y-4">
-              {projects.length === 0 && <div className="text-center text-gray-500 py-10">No projects yet. Add one!</div>}
+            {/* RIGHT: PROJECT LIST */}
+            <div className="
+                lg:col-span-1 
+                
+                /* Mobile: Horizontal Scroll */
+                flex 
+                overflow-x-auto 
+                snap-x 
+                gap-4 
+                pb-4 
+                
+                /* Desktop: Vertical Scroll (Internal) */
+                lg:flex-col 
+                lg:space-y-4 
+                lg:pb-0 
+                lg:overflow-y-auto       /* <--- Change: Allows internal scrolling */
+                lg:max-h-[97.5vh]          /* <--- Change: Limits height to fit screen */
+                lg:pr-2                  /* <--- Change: Spacing for scrollbar */
+                
+                scrollbar-hide
+              ">
+              {projects.length === 0 && <div className="text-center text-gray-500 py-10 w-full">No projects yet. Add one!</div>}
               
               {projects.map((project) => (
-                <div key={project._id} className="bg-surface group hover:bg-white/5 p-4 rounded-2xl border border-white/5 flex flex-col sm:flex-row gap-5 transition-all">
-                  <div className="w-full sm:w-32 h-48 sm:h-32 flex-shrink-0 relative rounded-xl overflow-hidden">
+                <div 
+                  key={project._id} 
+                  className="
+                    bg-surface group hover:bg-white/5 p-4 rounded-2xl border border-white/5 flex flex-col sm:flex-row gap-5 transition-all
+                    min-w-[85vw] sm:min-w-[400px] snap-center
+                    lg:min-w-0 lg:w-full
+                  "
+                >
+                  <div className="w-full sm:w-32 h-48 sm:h-32 flex-shrink-0 relative rounded-xl overflow-hidden bg-black/20">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                     <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded text-xs font-bold text-white border border-white/10">
-                      #{project.order || 99}
+                      #{project.order}
                     </div>
                   </div>
-
                   <div className="flex-1 flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-start">
@@ -221,20 +258,10 @@ const Dashboard = () => {
                         <span className="text-xs bg-primary/20 text-primary px-2 py-1 rounded border border-primary/20">{project.type}</span>
                       </div>
                       <p className="text-gray-400 text-sm line-clamp-2 mb-3">{project.description}</p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tech.slice(0, 4).map((t, i) => (
-                          <span key={i} className="text-xs text-gray-500 bg-black/30 px-2 py-1 rounded border border-white/5">{t}</span>
-                        ))}
-                      </div>
                     </div>
-
                     <div className="flex gap-3 mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/5">
-                      <button onClick={() => handleEdit(project)} className="flex-1 flex items-center justify-center gap-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 px-4 py-2 rounded-lg transition-colors text-sm font-bold">
-                        <FaEdit /> Edit
-                      </button>
-                      <button onClick={() => handleDelete(project._id)} className="flex-1 flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-2 rounded-lg transition-colors text-sm font-bold">
-                        <FaTrash /> Delete
-                      </button>
+                      <button onClick={() => handleEdit(project)} className="flex-1 flex items-center justify-center gap-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 px-4 py-2 rounded-lg transition-colors text-sm font-bold"><FaEdit /> Edit</button>
+                      <button onClick={() => handleDelete(project._id)} className="flex-1 flex items-center justify-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-2 rounded-lg transition-colors text-sm font-bold"><FaTrash /> Delete</button>
                     </div>
                   </div>
                 </div>
@@ -242,10 +269,10 @@ const Dashboard = () => {
             </div>
           </div>
         )}
-
+        
         {/* MESSAGES TAB */}
         {activeTab === 'messages' && (
-          <div className="grid md:grid-cols-2 gap-4">
+           <div className="grid md:grid-cols-2 gap-4">
             {messages.length === 0 ? <p className="text-gray-500 col-span-2 text-center py-10">No messages received yet.</p> : messages.map((msg) => (
               <div key={msg._id} className="bg-surface p-6 rounded-2xl border border-white/5 relative group hover:border-primary/30 transition-colors">
                 <div className="flex justify-between items-start mb-4">
@@ -265,7 +292,6 @@ const Dashboard = () => {
             ))}
           </div>
         )}
-
       </div>
     </div>
   );
