@@ -71,7 +71,7 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-background text-text min-h-screen relative overflow-hidden pb-24 md:pb-0">
+    <div className="bg-background text-text min-h-screen relative overflow-hidden pb-24">
       
       <div className="hidden md:block pointer-events-none absolute inset-0 z-0">
         <Spotlight />
@@ -206,7 +206,7 @@ const Home = () => {
 
       <Contact />
 
-      <footer className="py-8 text-center text-gray-500 border-t border-white/5 relative z-10 text-sm">
+      <footer className="py-8 text-center text-gray-500 border-t border-white/5 relative z-10 text-sm mt-auto">
         <p>© {new Date().getFullYear()} Prashant More. All rights reserved.</p>
         <p className='mt-2'>Made with ❤️ by Prashant More.</p>
       </footer>
