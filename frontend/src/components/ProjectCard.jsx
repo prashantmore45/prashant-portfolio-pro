@@ -1,11 +1,10 @@
-import { FaGithub, FaExternalLinkAlt, FaReact, FaNodeJs, FaPython, FaDatabase, FaHtml5, FaCss3Alt, FaJs } from 'react-icons/fa';
-import { SiMongodb, SiExpress, SiTailwindcss, SiRedux, SiFirebase, SiTypescript, SiNextdotjs } from 'react-icons/si'; // You might need to install: npm install react-icons
-import { motion as Motion} from 'framer-motion';
+import { FaGithub, FaExternalLinkAlt, FaReact, FaNodeJs, FaPython, FaDatabase, FaHtml5, FaCss3Alt, FaJs, FaBriefcase } from 'react-icons/fa'; 
+import { SiMongodb, SiExpress, SiTailwindcss, SiRedux, SiFirebase, SiTypescript, SiNextdotjs } from 'react-icons/si'; 
+import { motion as Motion } from 'framer-motion';
 import { FaCode } from 'react-icons/fa';
 
-// 1.Map string names to Icons & Colors
+// 1. Map string names to Icons & Colors
 const getTechInfo = (techName) => {
-
   const lower = techName.toLowerCase();
 
   switch (true) {
@@ -29,9 +28,16 @@ const getTechInfo = (techName) => {
   }
 };
 
-
 const ProjectCard = ({ project, theme }) => {
-  // Default theme fallback
+  const isInternship = project.tech.some(t => 
+    t.toLowerCase() === 'codsoft' || t.toLowerCase() === 'internship'
+  );
+
+  // FILTER
+  const visibleTech = project.tech.filter(t => 
+    t.toLowerCase() !== 'codsoft' && t.toLowerCase() !== 'internship'
+  );
+
   const currentTheme = theme || {
     badge: "bg-primary/20 text-primary border-primary/20",
     hoverBorder: "hover:border-primary/50",
@@ -42,7 +48,13 @@ const ProjectCard = ({ project, theme }) => {
   return (
     <Motion.div 
       whileHover={{ y: -5 }}
-      className={`group flex flex-col h-full bg-[#18181b] rounded-3xl overflow-hidden border border-white/10 ${currentTheme.hoverBorder} transition-all duration-300 shadow-lg ${currentTheme.shadow}`}
+      className={`
+        group flex flex-col h-full bg-[#18181b] rounded-3xl overflow-hidden border transition-all duration-300 shadow-lg
+        ${isInternship 
+            ? 'border-amber-500/30 hover:border-amber-500 hover:shadow-[0_0_30px_rgba(245,158,11,0.2)]' 
+            : `border-white/10 ${currentTheme.hoverBorder} ${currentTheme.shadow}`
+        }
+      `}
     >
       {/* 1. Image Section */}
       <div className="relative h-48 sm:h-64 w-full overflow-hidden">
@@ -53,17 +65,28 @@ const ProjectCard = ({ project, theme }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#18181b] via-transparent to-transparent opacity-80" />
         
+        {/* TYPE BADGE */}
         <div className={`absolute top-4 left-4 backdrop-blur-md px-3 py-1 rounded-full border ${currentTheme.badge}`}>
-          <span className="text-[10px] font-bold uppercase tracking-wider">
-            {project.type}
-          </span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+                {project.type}
+            </span>
         </div>
+
+        {/* INTERNSHIP BADGE */}
+        {isInternship && (
+            <div className="absolute top-4 right-4 backdrop-blur-md px-3 py-1.5 rounded-full border border-amber-500/50 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.3)] flex items-center gap-2">
+                <FaBriefcase className="text-amber-400 text-xs" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                    CodSoft Work
+                </span>
+            </div>
+        )}
       </div>
 
       {/* 2. Content Section */}
       <div className="flex-1 p-6 flex flex-col">
         <div className="mb-6">
-            <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
+            <h3 className={`text-2xl font-bold mb-2 leading-tight ${isInternship ? 'text-white group-hover:text-amber-400' : 'text-white'}`}>
                 {project.title}
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -73,7 +96,7 @@ const ProjectCard = ({ project, theme }) => {
 
         {/* Tech Stack */}
         <div className="flex flex-wrap gap-2 mb-8 mt-auto">
-            {project.tech.map((t, index) => {
+            {visibleTech.map((t, index) => {
                 const { icon: Icon, color } = getTechInfo(t); 
                 return (
                     <span 
@@ -102,7 +125,11 @@ const ProjectCard = ({ project, theme }) => {
                     href={project.demo} 
                     target="_blank" 
                     rel="noreferrer" 
-                    className={`flex-1 flex items-center justify-center gap-2 text-sm font-bold py-3 rounded-xl transition-all ${currentTheme.button}`}
+                    className={`flex-1 flex items-center justify-center gap-2 text-sm font-bold py-3 rounded-xl transition-all 
+                        ${isInternship 
+                            ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-white border border-amber-500/20' 
+                            : currentTheme.button
+                        }`}
                 >
                     <FaExternalLinkAlt /> Live
                 </a>

@@ -8,7 +8,8 @@ import Skills from '../components/Skills';
 import Contact from '../components/Contact';
 import Spotlight from '../components/Spotlight';
 import api from '../api/axios';
-import { FaGraduationCap, FaCode, FaLaptopCode, FaArrowRight, FaHandPointRight } from 'react-icons/fa'; // Added Hand Icon
+import { FaGraduationCap, FaCode, FaLaptopCode, FaArrowRight, FaHandPointRight } from 'react-icons/fa'; 
+import Experience from '../components/Experience';
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
@@ -159,6 +160,8 @@ const Home = () => {
           </>
         )}
       </section>
+
+      <Experience />
 
       <Skills />
       

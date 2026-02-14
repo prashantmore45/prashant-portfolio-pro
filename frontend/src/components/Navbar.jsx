@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaUser, FaCode, FaEnvelope, FaLock, FaGithub, FaLinkedin, FaFileAlt } from 'react-icons/fa';
+import { FaHome, FaUser, FaCode, FaEnvelope, FaLock, FaGithub, FaLinkedin, FaFileAlt, FaBriefcase } from 'react-icons/fa';
 
 const Navbar = () => {
   const location = useLocation();
@@ -8,6 +8,7 @@ const Navbar = () => {
     { name: 'Home', id: 'home', icon: <FaHome size={20} /> },
     { name: 'About', id: 'about', icon: <FaUser size={20} /> },
     { name: 'Work', id: 'projects', icon: <FaCode size={20} /> },
+    { name: 'Experience', id: 'experience', icon: <FaBriefcase size={20} /> },
     { name: 'Contact', id: 'contact', icon: <FaEnvelope size={20} /> },
   ];
 
