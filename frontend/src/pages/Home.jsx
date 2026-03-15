@@ -10,9 +10,10 @@ import Spotlight from '../components/Spotlight';
 import api from '../api/axios';
 import { FaGraduationCap, FaCode, FaLaptopCode, FaArrowRight, FaHandPointRight } from 'react-icons/fa'; 
 import Experience from '../components/Experience';
+import { staticProjects } from '../constants/staticProjects';
 
 const Home = () => {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState(staticProjects);
   const [loading, setLoading] = useState(true);
   const [hasScrolled, setHasScrolled] = useState(false);
 
@@ -20,9 +21,11 @@ const Home = () => {
     const fetchProjects = async () => {
       try {
         const res = await api.get('/projects');
-        setProjects(res.data);
+        if (res.data && res.data.length > 0) {
+          setProjects(res.data);
+        }
       } catch (err) {
-        console.error("Failed to load projects", err);
+        console.error("Backend is waking up... displaying static projects.", err);
       } finally {
         setLoading(false);
       }
@@ -88,7 +91,18 @@ const Home = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="mb-8 md:mb-12 text-center md:text-left"
         >
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Selected <span className="text-primary">Works</span></h2>
+            <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+              <h2 className="text-3xl md:text-5xl font-bold">
+                Selected <span className="text-primary">Works</span>
+              </h2>
+              {/* Subtle indicator: if loading is still true, show a pulsing dot */}
+              {loading && (
+                <span className="flex h-3 w-3 relative mt-2" title="Fetching latest from MongoDB...">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+                </span>
+              )}
+            </div>
             <p className="text-gray-400 max-w-xl text-lg mx-auto md:mx-0">
                 A collection of digital products and experiments.
             </p>
@@ -102,63 +116,57 @@ const Home = () => {
             </div>
         </motion.div>
 
-        {loading ? (
-          <div className="text-primary animate-pulse text-xl text-center">Loading Projects...</div>
-        ) : (
-          <>
+        <div 
+            onScroll={handleScroll}
+            className="
+            flex 
+            overflow-x-auto 
+            snap-x 
+            snap-mandatory 
+            gap-4 
+            pb-8 
+            px-2
+            scrollbar-hide
+
+            md:grid 
+            md:grid-cols-12 
+            md:gap-6 
+            md:auto-rows-fr 
+            md:overflow-visible 
+            md:pb-0
+            md:px-0
+        ">
+            {projects.slice(0, 4).map((project, index) => (
             <div 
-                onScroll={handleScroll}
-                className="
-                flex 
-                overflow-x-auto 
-                snap-x 
-                snap-mandatory 
-                gap-4 
-                pb-8 
-                px-2
-                scrollbar-hide
-
-                md:grid 
-                md:grid-cols-12 
-                md:gap-6 
-                md:auto-rows-fr 
-                md:overflow-visible 
-                md:pb-0
-                md:px-0
-            ">
-                {projects.slice(0, 4).map((project, index) => (
-                <div 
-                    key={project._id}
-                    className={`
-                    min-w-[85vw] 
-                    sm:min-w-[400px] 
-                    snap-center 
-                    md:min-w-0 
-                    md:w-full
-                    h-full
-                    ${getGridSpan(index)}
-                    `}
-                >
-                    <ProjectCard 
-                        project={project} 
-                        theme={themes[index % themes.length]} 
-                    />
-                </div>
-                ))}
+                key={project._id}
+                className={`
+                min-w-[85vw] 
+                sm:min-w-[400px] 
+                snap-center 
+                md:min-w-0 
+                md:w-full
+                h-full
+                ${getGridSpan(index)}
+                `}
+            >
+                <ProjectCard 
+                    project={project} 
+                    theme={themes[index % themes.length]} 
+                />
             </div>
+            ))}
+        </div>
 
-            {/* View Full Archive Link */}
-            <div className="mt-8 md:mt-12 text-center">
-                <Link 
-                    to="/archive" 
-                    className="inline-flex items-center gap-2 text-gray-400 border-b border-gray-700 pb-1 hover:text-white hover:border-white transition-colors group text-sm md:text-base"
-                >
-                    <span className="font-medium">View Full Project Archive</span>
-                    <FaArrowRight className="transform group-hover:translate-x-1 transition-transform text-xs" />
-                </Link>
-            </div>
-          </>
-        )}
+        {/* View Full Archive Link */}
+        <div className="mt-8 md:mt-12 text-center">
+            <Link 
+                to="/archive" 
+                className="inline-flex items-center gap-2 text-gray-400 border-b border-gray-700 pb-1 hover:text-white hover:border-white transition-colors group text-sm md:text-base"
+            >
+                <span className="font-medium">View Full Project Archive</span>
+                <FaArrowRight className="transform group-hover:translate-x-1 transition-transform text-xs" />
+            </Link>
+        </div>
       </section>
 
       <Experience />
