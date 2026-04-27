@@ -13,6 +13,15 @@ app.use(cors({
 
 app.use(express.json());
 
+// Health Check Endpoint - Prevents Render sleep
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'Server is active',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 // Routes
 app.use('/api/projects', require('./routes/projects'));
 app.use('/api/contact', require('./routes/contact'));
