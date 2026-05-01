@@ -13,13 +13,34 @@ app.use(cors({
 
 app.use(express.json());
 
-// Health Check Endpoint - Prevents Render sleep
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'Server is active',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
+// Health Check Endpoint - Prevents Render and MongoDB sleep
+app.get('/api/health', async (req, res) => {
+  try {
+    // Ping MongoDB to keep it warm
+    await mongoose.connection.db.admin().ping();
+    
+    res.status(200).json({ 
+      status: 'Server is active',
+      database: 'Connected',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  } catch (dbError) {
+    // Attempt to reconnect if connection failed
+    try {
+      await mongoose.connect(process.env.MONGO_URI);
+      console.log('MongoDB reconnected via health check');
+    } catch (err) {
+      console.warn('Database reconnection attempt during health check:', err.message);
+    }
+    
+    res.status(200).json({ 
+      status: 'Server is active',
+      database: 'Reconnecting...',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  }
 });
 
 // Routes
