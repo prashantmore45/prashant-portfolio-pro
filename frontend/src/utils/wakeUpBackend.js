@@ -28,18 +28,49 @@ export const wakeUpBackend = async () => {
 };
 
 /**
- * Set up periodic pings to keep backend alive
- * Pings every 10 minutes (600000ms) to prevent sleep
+ * Set up aggressive pinging to keep backend alive
+ * - Immediate ping on app load
+ * - Retry after 3 seconds if first attempt fails
+ * - Ping every 5 minutes during user activity
+ * - Aggressive ping every 2 minutes during first 5 minutes
  */
 export const setupBackendHeartbeat = () => {
-  // Initial wake-up attempt
-  wakeUpBackend();
+  console.log('🚀 Setting up backend heartbeat...');
   
-  // Periodic ping every 10 minutes
-  const interval = setInterval(() => {
+  // Initial aggressive wake-up attempt
+  wakeUpBackend().then(success => {
+    if (!success) {
+      // Retry after 3 seconds if first attempt fails
+      setTimeout(() => {
+        console.log('🔄 Retrying backend wake-up...');
+        wakeUpBackend();
+      }, 3000);
+    }
+  });
+  
+  // Aggressive pinging in first 5 minutes (every 2 minutes)
+  let aggressiveCount = 0;
+  const aggressiveInterval = setInterval(() => {
+    aggressiveCount++;
+    if (aggressiveCount <= 2) {
+      console.log('💪 Aggressive ping attempt ' + aggressiveCount);
+      wakeUpBackend();
+    } else {
+      clearInterval(aggressiveInterval);
+      // Switch to normal heartbeat after 5 minutes
+      console.log('✅ Switching to normal heartbeat');
+    }
+  }, 120000); // 2 minutes
+  
+  // Regular heartbeat every 4 minutes after aggressive phase
+  const regularInterval = setInterval(() => {
+    console.log('💓 Regular heartbeat ping');
     wakeUpBackend();
-  }, 600000); // 10 minutes
+  }, 240000); // 4 minutes
   
-  // Cleanup function to clear interval if needed
-  return () => clearInterval(interval);
+  // Cleanup function to clear intervals if needed
+  return () => {
+    clearInterval(aggressiveInterval);
+    clearInterval(regularInterval);
+  };
 };
