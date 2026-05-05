@@ -21,8 +21,9 @@ const Home = () => {
     const fetchProjects = async () => {
       try {
         const res = await api.get('/projects');
-        if (res.data && res.data.length > 0) {
-          setProjects(res.data);
+        // Backend wraps response in { data: projects, pagination: {...} }
+        if (res.data && res.data.data && res.data.data.length > 0) {
+          setProjects(res.data.data);
         }
       } catch (err) {
         console.error("Backend is waking up... displaying static projects.", err);

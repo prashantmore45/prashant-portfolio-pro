@@ -44,8 +44,9 @@ const Archive = () => {
     const fetchProjects = async () => {
       try {
         const res = await api.get('/projects');
-        setProjects(res.data);
-        setFilteredProjects(res.data);
+        // Backend wraps response in { data: projects, pagination: {...} }
+        setProjects(res.data.data || []);
+        setFilteredProjects(res.data.data || []);
       } catch (err) {
         console.error("Failed to load archive", err);
       } finally {

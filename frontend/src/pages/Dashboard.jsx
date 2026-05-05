@@ -32,10 +32,12 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const projRes = await api.get('/projects');
-      setProjects(projRes.data);
+      // Backend wraps response in { data: projects, pagination: {...} }
+      setProjects(projRes.data.data || []);
       try {
         const msgRes = await api.get('/contact');
-        setMessages(msgRes.data);
+        // Backend returns array directly: [{...}, {...}]
+        setMessages(msgRes.data || []);
       } catch (e) { console.log("Message fetch skipped", e); }
     } catch (err) { console.error("Error fetching data:", err); }
   };
