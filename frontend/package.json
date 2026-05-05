@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@splinetool/react-spline": "^4.1.0",
-    "axios": "^1.13.2",
     "framer-motion": "^12.26.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -28,8 +27,11 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "lightningcss": "^1.32.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
-    "vite": "^7.2.4"
+    "terser": "^5.46.2",
+    "vite": "^7.2.4",
+    "vite-plugin-node-polyfills": "^0.26.0"
   }
 }

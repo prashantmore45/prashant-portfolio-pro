@@ -15,15 +15,12 @@ export default defineConfig({
   build: {
     // Optimize bundling with code splitting
     rollupOptions: {
-      // Ignore Node.js built-ins that axios tries to import
-      external: ['stream', 'https', 'http', 'fs', 'path', 'zlib'],
       output: {
         // Split code into vendor chunks for better caching
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-animations': ['framer-motion'],
           'vendor-icons': ['react-icons'],
-          'vendor-http': ['axios'],
           // Spline loads on demand
         }
       }
@@ -31,22 +28,12 @@ export default defineConfig({
     
     // Minification settings for better performance
     minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console logs in production
-        drop_debugger: true
-      },
-      output: {
-        comments: false
-      }
-    },
     
     // Target modern browsers for better performance
     target: 'ES2020',
     
     // CSS optimization
     cssCodeSplit: true,
-    cssMinify: 'lightningcss',
     
     // Disable source maps in production (save space)
     sourcemap: false,
@@ -75,8 +62,8 @@ export default defineConfig({
       'react-icons',
       'lodash.debounce'  // Pre-bundle CommonJS module used by @splinetool/react-spline
     ],
-    // Exclude axios and Spline to avoid Node.js module import issues
-    exclude: ['axios', '@splinetool/react-spline'],
+    // Exclude Spline to reduce initial bundle
+    exclude: ['@splinetool/react-spline'],
     esbuildOptions: {
       supported: {
         bigint: false
