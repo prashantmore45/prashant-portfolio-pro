@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
       .sort({ order: 1 })
       .skip(skip)
       .limit(limit)
-      .select('title description image tech link featured type order') // Only select needed fields
+      .select('title description image tech github demo type order') // Select all needed fields
       .lean() // Returns plain JS objects, faster than full Mongoose docs
       .exec();
 
