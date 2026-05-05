@@ -15,9 +15,11 @@ app.use(mongoSanitize()); // Prevent NoSQL injection attacks
 
 // Optimized CORS configuration
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const productionFrontendUrl = process.env.FRONTEND_URL || 'https://prashant-portfolio-pro.vercel.app';
+
 const allowedOrigins = isDevelopment
   ? ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'] // Dev: accept all common local ports
-  : (process.env.FRONTEND_URL || 'http://localhost:5173').split(',');
+  : productionFrontendUrl.split(',').map(url => url.trim()); // Production: use environment variable (can be comma-separated)
 
 app.use(cors({
   origin: function(origin, callback) {
@@ -27,6 +29,8 @@ app.use(cors({
     if (isDevelopment || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.warn(`CORS blocked request from origin: ${origin}`);
+      console.warn(`Allowed origins: ${allowedOrigins.join(', ')}`);
       callback(new Error('CORS not allowed'));
     }
   },
