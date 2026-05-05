@@ -1,4 +1,4 @@
-import Spline from '@splinetool/react-spline';
+import DeferredSpline from './DeferredSpline';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { FaArrowDown, FaGithub, FaLinkedin } from 'react-icons/fa';
@@ -8,7 +8,7 @@ const Hero3D = () => {
     <section className="relative min-h-screen w-full bg-[#0a0a0a] overflow-hidden flex flex-col items-center justify-center pt-24 pb-12 md:py-0">
       
       <div className="absolute inset-0 z-0">
-         <Spline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
+         <DeferredSpline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6">

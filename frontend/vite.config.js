@@ -21,7 +21,7 @@ export default defineConfig({
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-animations': ['framer-motion'],
           'vendor-icons': ['react-icons'],
-          // Spline loads on demand
+          'vendor-spline': ['@splinetool/react-spline'] // Lazy-load 3D component separately
         }
       }
     },
