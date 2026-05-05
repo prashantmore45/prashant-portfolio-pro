@@ -1,76 +1,73 @@
-/**
- * Utility to wake up Render backend from sleep
- * Render free tier puts services to sleep after 15 mins of inactivity
- * This function pings the health endpoint to keep it awake
- */
-
 const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+const isMobile = () => /iPhone|Android|Mobile/.test(navigator.userAgent);
+const isOnline = () => navigator.onLine;
+
+const HEARTBEAT_INTERVALS = {
+  mobile: 10 * 60 * 1000,
+  desktop: 5 * 60 * 1000
+};
+
 export const wakeUpBackend = async () => {
+  if (!isOnline()) return false;
+
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     const response = await fetch(`${BACKEND_URL}/health`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal
     });
     
-    if (response.ok) {
-      const data = await response.json();
-      console.log('✅ Backend is awake:', data.status);
-      return true;
-    }
-  } catch (error) {
-    console.warn('⚠️ Backend wake-up attempt failed (may be starting):', error.message);
-    // This is not critical - backend may take a moment to start
+    clearTimeout(timeoutId);
+    return response.ok;
+  } catch {
     return false;
   }
 };
 
-/**
- * Set up aggressive pinging to keep backend alive
- * - Immediate ping on app load
- * - Retry after 3 seconds if first attempt fails
- * - Ping every 5 minutes during user activity
- * - Aggressive ping every 2 minutes during first 5 minutes
- */
 export const setupBackendHeartbeat = () => {
-  console.log('🚀 Setting up backend heartbeat...');
+  const isOnMobile = isMobile();
+  const interval = isOnMobile ? HEARTBEAT_INTERVALS.mobile : HEARTBEAT_INTERVALS.desktop;
   
-  // Initial aggressive wake-up attempt
+  // Initial wake-up with retry
   wakeUpBackend().then(success => {
-    if (!success) {
-      // Retry after 3 seconds if first attempt fails
-      setTimeout(() => {
-        console.log('🔄 Retrying backend wake-up...');
-        wakeUpBackend();
-      }, 3000);
+    if (!success && isOnline()) {
+      setTimeout(() => wakeUpBackend(), 3000);
     }
   });
-  
-  // Aggressive pinging in first 5 minutes (every 2 minutes)
-  let aggressiveCount = 0;
-  const aggressiveInterval = setInterval(() => {
-    aggressiveCount++;
-    if (aggressiveCount <= 2) {
-      console.log('💪 Aggressive ping attempt ' + aggressiveCount);
-      wakeUpBackend();
+
+  // Heartbeat interval
+  let heartbeatInterval = setInterval(() => {
+    if (isOnline()) wakeUpBackend();
+  }, interval);
+
+  // Pause/resume on visibility change
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      clearInterval(heartbeatInterval);
     } else {
-      clearInterval(aggressiveInterval);
-      // Switch to normal heartbeat after 5 minutes
-      console.log('✅ Switching to normal heartbeat');
+      wakeUpBackend();
+      heartbeatInterval = setInterval(() => {
+        if (isOnline()) wakeUpBackend();
+      }, interval);
     }
-  }, 120000); // 2 minutes
-  
-  // Regular heartbeat every 4 minutes after aggressive phase
-  const regularInterval = setInterval(() => {
-    console.log('💓 Regular heartbeat ping');
-    wakeUpBackend();
-  }, 240000); // 4 minutes
-  
-  // Cleanup function to clear intervals if needed
+  };
+
+  // Handle connectivity changes
+  const handleOnline = () => wakeUpBackend();
+  const handleOffline = () => clearInterval(heartbeatInterval);
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  window.addEventListener('online', handleOnline);
+  window.addEventListener('offline', handleOffline);
+
   return () => {
-    clearInterval(aggressiveInterval);
-    clearInterval(regularInterval);
+    clearInterval(heartbeatInterval);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('online', handleOnline);
+    window.removeEventListener('offline', handleOffline);
   };
 };
