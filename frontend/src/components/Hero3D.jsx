@@ -33,7 +33,7 @@ const Hero3D = () => {
               </h1>
               
               <p className="text-gray-300 text-sm sm:text-base md:text-lg mb-6 md:mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
-                A <span className="text-white font-semibold">Full-Stack Engineer</span> architecting 3D web experiences and scalable systems. I turn complex problems into elegant code.
+                A <span className="text-white font-semibold">Full-Stack Developer</span> and AI enthusiast building scalable web applications, intelligent solutions, and modern digital experiences. Passionate about solving real-world problems through clean code and continuous innovation.
               </p>
 
               <div className="flex flex-row flex-wrap items-center gap-4 justify-center md:justify-start">
