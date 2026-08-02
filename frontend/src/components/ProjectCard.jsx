@@ -2,6 +2,7 @@ import { FaGithub, FaExternalLinkAlt, FaReact, FaNodeJs, FaPython, FaDatabase, F
 import { SiMongodb, SiExpress, SiTailwindcss, SiRedux, SiFirebase, SiTypescript, SiNextdotjs } from 'react-icons/si'; 
 import { motion as Motion } from 'framer-motion';
 import { FaCode } from 'react-icons/fa';
+import OptimizedImage from './OptimizedImage';
 
 // 1. Map string names to Icons & Colors
 const getTechInfo = (techName) => {
@@ -58,9 +59,9 @@ const ProjectCard = ({ project, theme }) => {
     >
       {/* 1. Image Section */}
       <div className="relative h-48 sm:h-64 w-full overflow-hidden">
-        <img 
-          src={project.image} 
-          alt={project.title} 
+        <OptimizedImage
+          src={project.image}
+          alt={project.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#18181b] via-transparent to-transparent opacity-80" />

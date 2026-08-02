@@ -7,6 +7,7 @@ import ProjectCard from '../components/ProjectCard';
 import Skills from '../components/Skills';
 import Contact from '../components/Contact';
 import Spotlight from '../components/Spotlight';
+import OptimizedImage from '../components/OptimizedImage';
 import api from '../api/axios';
 import { FaGraduationCap, FaCode, FaLaptopCode, FaArrowRight, FaHandPointRight } from 'react-icons/fa'; 
 import Experience from '../components/Experience';
@@ -206,7 +207,13 @@ const Home = () => {
                     whileHover={{ scale: 1.02 }}
                     className="h-[300px] md:h-full min-h-[300px] md:min-h-[400px] bg-gradient-to-br from-primary/20 to-purple-900/20 rounded-3xl border border-white/10 flex items-center justify-center relative overflow-hidden"
                 >
-                    <div className="absolute inset-0 bg-[url('/images/bg.png')] bg-cover bg-center opacity-50 mix-blend-overlay"></div>
+                    <OptimizedImage
+                        src="/images/bg.png"
+                        alt=""
+                        width={508}
+                        height={492}
+                        className="absolute inset-0 w-full h-full object-cover object-center opacity-50 mix-blend-overlay"
+                    />
                     <div className="relative z-10 text-center">
                         <h3 className="text-5xl md:text-7xl font-bold text-white/10">DEV</h3>
                         <p className="text-primary font-mono mt-2">{'< Prashant />'}</p>

@@ -1,4 +1,5 @@
 import DeferredSpline from './DeferredSpline';
+import OptimizedImage from './OptimizedImage';
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { FaArrowDown, FaGithub, FaLinkedin } from 'react-icons/fa';
@@ -48,9 +49,12 @@ const Hero3D = () => {
             </div>
 
             <div className="relative h-[250px] sm:h-[300px] md:h-[500px] w-full order-1 md:order-2 bg-gradient-to-b from-primary/20 to-transparent">
-              <img 
-                src="/images/mee.png" 
-                alt="Prashant More" 
+              <OptimizedImage
+                src="/images/mee.png"
+                alt="Prashant More"
+                width={490}
+                height={510}
+                priority
                 className="w-full h-full object-cover object-center md:object-top opacity-90 hover:opacity-100 transition-opacity duration-500 mix-blend-overlay md:mix-blend-normal"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent md:hidden"></div>

@@ -16,12 +16,15 @@ export default defineConfig({
     // Optimize bundling with code splitting
     rollupOptions: {
       output: {
-        // Split code into vendor chunks for better caching
+        // Split code into vendor chunks for better caching.
+        // NOTE: @splinetool/react-spline must NOT be listed here. Naming it makes
+        // Rollup treat it as a static chunk, which makes Vite emit a
+        // <link rel="modulepreload"> for it and defeats the lazy() in
+        // DeferredSpline. Left out, it becomes a true on-demand chunk.
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-animations': ['framer-motion'],
-          'vendor-icons': ['react-icons'],
-          'vendor-spline': ['@splinetool/react-spline'] // Lazy-load 3D component separately
+          'vendor-icons': ['react-icons']
         }
       }
     },
