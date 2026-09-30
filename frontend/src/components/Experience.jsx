@@ -1,5 +1,5 @@
 import { motion as Motion } from 'framer-motion';
-import { FaBriefcase, FaCalendarAlt, FaCertificate, FaReact, FaNodeJs, FaGitAlt, FaDatabase, FaCode } from 'react-icons/fa';
+import { FaBriefcase, FaCalendarAlt, FaCertificate, FaReact, FaNodeJs, FaGitAlt, FaDatabase, FaCode, FaPython, FaDocker, FaLinux } from 'react-icons/fa';
 import { SiMongodb, SiTailwindcss, SiExpress } from 'react-icons/si';
 
 // 1. HELPER: Map string names to Icons & Colors 
@@ -14,12 +14,31 @@ const getTechInfo = (techName) => {
     case lower.includes('tailwind'): return { icon: SiTailwindcss, color: "text-[#06B6D4] bg-[#06B6D4]/10 border-[#06B6D4]/20" };
     case lower.includes('git'): return { icon: FaGitAlt, color: "text-[#F05032] bg-[#F05032]/10 border-[#F05032]/20" };
     case lower.includes('mern'): return { icon: FaDatabase, color: "text-violet-400 bg-violet-500/10 border-violet-500/20" }; // Special color for MERN
+    case lower.includes('python'): return { icon: FaPython, color: "text-[#3776AB] bg-[#3776AB]/10 border-[#3776AB]/20" };
+    case lower.includes('docker'): return { icon: FaDocker, color: "text-[#2496ED] bg-[#2496ED]/10 border-[#2496ED]/20" };
+    case lower.includes('linux'): return { icon: FaLinux, color: "text-[#FCC624] bg-[#FCC624]/10 border-[#FCC624]/20" };
     default: return { icon: FaCode, color: "text-gray-400 bg-white/5 border-white/5" };
   }
 };
 
 const Experience = () => {
   const experiences = [
+    {
+      id: 2,
+      role: "AI Research Intern",
+      company: "Ambiguity Labs",
+      period: "Jun 2026 - August 2026",
+      description: "Contributing to AI and software engineering research by developing, evaluating, and validating programming tasks across multiple technologies and technical domains. Implementing and debugging solutions while evaluating correctness, software quality, reproducibility, and engineering best practices.",
+      tech: [
+        "AI Engineering",
+        "Software Engineering",
+        "Python",
+        "Git",
+        "Docker",
+        "Linux",
+        "REST APIs"
+      ]
+    },
     {
       id: 1,
       role: "Web Development Intern",
