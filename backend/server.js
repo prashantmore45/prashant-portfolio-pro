@@ -22,10 +22,10 @@ const allowedOrigins = isDevelopment
   : productionFrontendUrl.split(',').map(url => url.trim()); // Production: use environment variable (can be comma-separated)
 
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
+
     if (isDevelopment || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -64,8 +64,8 @@ app.get('/api/health', async (req, res) => {
   try {
     // Ping MongoDB to keep it warm
     await mongoose.connection.db.admin().ping();
-    
-    res.status(200).json({ 
+
+    res.status(200).json({
       status: 'Server is active',
       database: 'Connected',
       timestamp: new Date().toISOString(),
@@ -79,8 +79,8 @@ app.get('/api/health', async (req, res) => {
     } catch (err) {
       console.warn('Database reconnection attempt during health check:', err.message);
     }
-    
-    res.status(200).json({ 
+
+    res.status(200).json({
       status: 'Server is active',
       database: 'Reconnecting...',
       timestamp: new Date().toISOString(),
