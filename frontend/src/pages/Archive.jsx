@@ -66,7 +66,7 @@ const Archive = () => {
   }, [search, projects]);
 
   return (
-    <div className="bg-background min-h-screen text-text pt-20 pb-24 px-4 md:px-8">
+    <div className="bg-background min-h-screen text-text pt-20 px-4 md:px-8">
       <div className="max-w-7xl mx-auto flex flex-col min-h-[85vh]">
         
         {/* Header & Search */}
