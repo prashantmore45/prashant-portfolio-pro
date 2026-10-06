@@ -7,9 +7,9 @@ import { FaArrowDown, FaGithub, FaLinkedin } from 'react-icons/fa';
 const Hero3D = () => {
   return (
     <section className="relative min-h-screen w-full bg-[#0a0a0a] overflow-hidden flex flex-col items-center justify-center pt-24 pb-12 md:py-0">
-      
+
       <div className="absolute inset-0 z-0">
-         <DeferredSpline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
+        <DeferredSpline scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode" />
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-6">
@@ -32,7 +32,7 @@ const Hero3D = () => {
                   Prashant More
                 </span>
               </h1>
-              
+
               <p className="text-gray-300 text-sm sm:text-base md:text-lg mb-6 md:mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
                 A <span className="text-white font-semibold">Full-Stack Developer</span> and AI enthusiast building scalable web applications, intelligent solutions, and modern digital experiences. Passionate about solving real-world problems through clean code and continuous innovation.
               </p>
@@ -42,8 +42,8 @@ const Hero3D = () => {
                   View Work
                 </a>
                 <div className="flex gap-4 items-center justify-center">
-                    <a href="https://github.com/prashantmore45" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors"><FaGithub size={20} className="md:text-[24px]"/></a>
-                    <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors"><FaLinkedin size={20} className="md:text-[24px]"/></a>
+                  <a href="https://github.com/prashantmore45" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors"><FaGithub size={20} className="md:text-[24px]" /></a>
+                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors"><FaLinkedin size={20} className="md:text-[24px]" /></a>
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@ const Hero3D = () => {
         </motion.div>
       </div>
 
-      <motion.div 
+      <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
         className="absolute bottom-6 z-10 text-white/50 hidden md:block"
