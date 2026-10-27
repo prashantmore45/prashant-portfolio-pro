@@ -37,7 +37,8 @@ const Experience = () => {
         "Docker",
         "Linux",
         "REST APIs"
-      ]
+      ],
+        certificate: "https://drive.google.com/file/d/1TMWSqd35R2hhHIQ1hRrVO9OvlbQHohdD/view?usp=drivesdk"
     },
     {
       id: 1,
